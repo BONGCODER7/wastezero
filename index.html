@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <title>Untitled</title>
+    <link rel="stylesheet" href="./style.css">
+
+  </head>
+    
+  <body>
+  <!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>WasteZero | Premium Kitchen AI</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/@zxing/library@latest"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Landing Page -->
+    <section id="landing-page" class="page active glass-layer">
+        <div class="hero">
+            <div class="hero-content slide-up">
+                <div class="hero-badge">AI-Powered Kitchen Assistant</div>
+                <h1>Stop Food Waste<br><span>Before It Starts.</span></h1>
+                <p>Scan real grocery barcodes, discover perfectly matched step-by-step recipes, and save thousands of rupees every year.</p>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary ripple" onclick="app.startApp()">Get Started <i class="fa-solid fa-arrow-right"></i></button>
+                    <button class="btn btn-secondary ripple" onclick="app.loadDemo()">Demo Pantry</button>
+                </div>
+            </div>
+            <div class="hero-illustration float-anim">
+                <img src="https://images.unsplash.com/photo-1606787366850-de6330128bfc?auto=format&fit=crop&w=800&q=80" alt="Healthy Food" class="hero-img">
+                <div class="glass-card stat-card mock-card">
+                    <i class="fa-solid fa-bell warning"></i>
+                    <div>
+                        <h4>Fresh Tomatoes</h4>
+                        <p>Expires in 2 days</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main App -->
+    <div id="app-container" class="hidden">
+        
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar glass">
+            <div class="logo">
+                <i class="fa-solid fa-leaf"></i>
+                <span>WasteZero</span>
+            </div>
+            <ul class="nav-links">
+                <li class="active" data-target="dashboard"><i class="fa-solid fa-chart-pie"></i> <span>Dashboard</span></li>
+                <li data-target="pantry"><i class="fa-solid fa-box-open"></i> <span>Pantry</span></li>
+                <li data-target="scanner"><i class="fa-solid fa-microchip"></i> <span>AI Scanner</span></li>
+                <li data-target="recipes"><i class="fa-solid fa-utensils"></i> <span>Recipes</span></li>
+                <li data-target="shopping"><i class="fa-solid fa-cart-shopping"></i> <span>Shopping</span></li>
+                <li data-target="analytics"><i class="fa-solid fa-chart-line"></i> <span>Analytics</span></li>
+                <li data-target="settings"><i class="fa-solid fa-gear"></i> <span>Settings</span></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="content">
+            <header class="app-header glass slide-down">
+                <div>
+                    <h2 id="page-title">Dashboard</h2>
+                    <p id="page-subtitle" class="subtext">Welcome to your beautiful smart kitchen.</p>
+                </div>
+                <div class="header-actions">
+                    <button class="icon-btn theme-toggle" onclick="app.toggleTheme()"><i class="fa-solid fa-moon"></i></button>
+                    <button class="btn btn-primary" onclick="app.navigate('scanner')"><i class="fa-solid fa-plus"></i> Add Item</button>
+                </div>
+            </header>
+
+            <!-- Dashboard Page -->
+            <section id="dashboard" class="app-section active">
+                <div class="stats-grid">
+                    <div class="stat-card glass slide-up" style="--i:1">
+                        <div class="stat-icon primary-bg"><i class="fa-solid fa-cubes"></i></div>
+                        <div class="stat-info"><h3 id="stat-total">0</h3><p>Total Items</p></div>
+                    </div>
+                    <div class="stat-card glass slide-up" style="--i:2">
+                        <div class="stat-icon danger-bg"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                        <div class="stat-info"><h3 id="stat-exp-today">0</h3><p>Expiring Today</p></div>
+                    </div>
+                    <div class="stat-card glass slide-up" style="--i:3">
+                        <div class="stat-icon warning-bg"><i class="fa-solid fa-calendar-week"></i></div>
+                        <div class="stat-info"><h3 id="stat-exp-week">0</h3><p>Expiring This Week</p></div>
+                    </div>
+                    <div class="stat-card glass slide-up" style="--i:4">
+                        <div class="stat-icon success-bg"><i class="fa-solid fa-wallet"></i></div>
+                        <div class="stat-info"><h3 id="stat-saved">₹0</h3><p>Est. Saved</p></div>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="ai-insights glass slide-up" style="--i:5">
+                        <h3><i class="fa-solid fa-wand-magic-sparkles primary"></i> AI Insights</h3>
+                        <ul id="insights-list" class="insights-list"></ul>
+                    </div>
+                    <div class="urgent-items glass slide-up" style="--i:6">
+                        <h3><i class="fa-solid fa-bell warning"></i> Urgent Alerts</h3>
+                        <div id="urgent-alerts-container" class="alerts-container"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Pantry Page -->
+            <section id="pantry" class="app-section">
+                <div class="controls-bar glass slide-up">
+                    <input type="text" id="search-pantry" placeholder="Search your pantry..." oninput="app.renderPantry()">
+                    <select id="filter-pantry" onchange="app.renderPantry()">
+                        <option value="all">All Items</option>
+                        <option value="fresh">Fresh (> 7 Days)</option>
+                        <option value="soon">Expiring Soon</option>
+                        <option value="expired">Expired</option>
+                    </select>
+                </div>
+                <div class="pantry-grid" id="pantry-grid"></div>
+            </section>
+
+            <!-- Real Barcode Scanner Page -->
+            <section id="scanner" class="app-section">
+                <div class="scanner-container glass slide-up">
+                    <h3 style="margin-bottom: 1rem; text-align:center;">Real Barcode Extraction</h3>
+                    <p class="subtext" style="text-align:center; margin-bottom: 1.5rem;">Upload a clear photo of a grocery barcode. We strictly extract the data.</p>
+                    
+                    <div class="scan-area" id="scan-area" onclick="document.getElementById('barcode-upload').click()">
+                        <div class="upload-placeholder" id="upload-placeholder">
+                            <i class="fa-solid fa-barcode fa-3x mb-1 primary"></i>
+                            <p>Click to upload barcode photo</p>
+                        </div>
+                        <img id="scan-preview" class="hidden" alt="Target Image">
+                        <div class="scanner-overlay hidden" id="scanner-overlay">
+                            <div class="crosshair tl"></div><div class="crosshair tr"></div>
+                            <div class="crosshair bl"></div><div class="crosshair br"></div>
+                            <div class="laser"></div>
+                        </div>
+                        <input type="file" id="barcode-upload" accept="image/*" hidden onchange="app.processRealScan(event)">
+                    </div>
+
+                    <div class="terminal hidden" id="scan-terminal">
+                        <div class="terminal-header">
+                            <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                            <span style="margin-left: 10px; font-size: 0.75rem; color: #888;">SCAN_LOG</span>
+                        </div>
+                        <div id="terminal-output"></div>
+                    </div>
+
+                    <form id="add-item-form" class="item-form" style="margin-top:2rem;" onsubmit="app.addPantryItem(event)">
+                        <div class="form-group">
+                            <label>Product Name</label>
+                            <input type="text" id="item-name" required placeholder="e.g. Aashirvaad Atta">
+                        </div>
+                        <div class="form-group">
+                            <label>Category</label>
+                            <select id="item-category" required>
+                                <option value="Dairy">Dairy & Milk</option>
+                                <option value="Vegetables">Vegetables & Greens</option>
+                                <option value="Fruits">Fruits</option>
+                                <option value="Meat">Meat & Seafood</option>
+                                <option value="Pantry">Pantry Staples</option>
+                            </select>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Purchase Date</label>
+                                <input type="date" id="item-purchase" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Expiry Date</label>
+                                <input type="date" id="item-expiry" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Quantity</label>
+                                <input type="number" id="item-qty" required min="1" value="1">
+                            </div>
+                            <div class="form-group">
+                                <label>Est. Price (₹)</label>
+                                <input type="number" id="item-price" step="1" required placeholder="0">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100 ripple" id="btn-add-item">Add To Pantry</button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Recipes Page -->
+            <section id="recipes" class="app-section">
+                <div class="recipe-hero glass slide-up">
+                    <i class="fa-solid fa-hat-chef fa-2x primary mb-1"></i>
+                    <h3>Culinary Inspiration</h3>
+                    <p>Perfectly matched step-by-step recipes generated to rescue your expiring ingredients.</p>
+                </div>
+                <div class="recipe-grid" id="recipe-grid"></div>
+            </section>
+
+            <!-- Shopping List Page -->
+            <section id="shopping" class="app-section">
+                <div class="shopping-header glass slide-up">
+                    <div>
+                        <h3>Smart Shopping List</h3>
+                        <p>Auto-generated to restock what you actually need.</p>
+                    </div>
+                    <button class="btn btn-secondary" onclick="window.print()"><i class="fa-solid fa-file-pdf"></i> Export</button>
+                </div>
+                <div class="shopping-list glass slide-up" id="shopping-list-container"></div>
+            </section>
+
+            <!-- Analytics Page -->
+            <section id="analytics" class="app-section">
+                <div class="charts-grid">
+                    <div class="chart-container glass slide-up" style="--i:1">
+                        <h4>Food Categories</h4>
+                        <canvas id="categoryChart"></canvas>
+                    </div>
+                    <div class="chart-container glass slide-up" style="--i:2">
+                        <h4>Expiry Distribution</h4>
+                        <canvas id="expiryChart"></canvas>
+                    </div>
+                    <div class="chart-container glass slide-up chart-full" style="--i:3">
+                        <h4>Monthly Savings Trend (₹)</h4>
+                        <canvas id="savingsChart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Settings Page -->
+            <section id="settings" class="app-section">
+                <div class="settings-grid">
+                    <div class="settings-card glass slide-up" style="--i:1">
+                        <h3>Preferences</h3>
+                        <div class="setting-item">
+                            <span>Dark Mode (AMOLED)</span>
+                            <label class="switch">
+                                <input type="checkbox" id="theme-switch" onchange="app.toggleTheme(this.checked)">
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <span>OS Push Notifications</span>
+                            <label class="switch">
+                                <input type="checkbox" id="notif-switch" onchange="app.toggleNotifications(event)">
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="settings-card glass slide-up" style="--i:2">
+                        <h3>Data Management</h3>
+                        <p class="subtext mb-1">Stored securely in your browser.</p>
+                        <button class="btn btn-secondary w-100 mb-1" onclick="app.exportData()">Export Data (JSON)</button>
+                        <button class="btn btn-danger w-100" onclick="app.clearData()">Clear All Data</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Recipe Step-by-Step Modal -->
+    <div id="recipe-modal" class="modal-overlay hidden">
+        <div class="modal-content glass">
+            <button class="close-modal" onclick="app.closeRecipeModal()"><i class="fa-solid fa-xmark"></i></button>
+            <img id="modal-img" class="modal-img" src="" alt="Recipe Image">
+            <div class="modal-body">
+                <h2 id="modal-title">Recipe Name</h2>
+                <div class="recipe-meta mb-1 mt-1">
+                    <span id="modal-diff"><i class="fa-solid fa-fire primary"></i> Medium</span>
+                    <span id="modal-time"><i class="fa-solid fa-stopwatch primary"></i> 30 mins</span>
+                </div>
+                
+                <h4 class="mt-2 mb-1"><i class="fa-solid fa-basket-shopping primary"></i> Ingredients</h4>
+                <ul id="modal-ingredients" class="modal-list"></ul>
+                
+                <h4 class="mt-2 mb-1"><i class="fa-solid fa-list-check primary"></i> Step-by-Step Guidance</h4>
+                <ol id="modal-steps" class="modal-steps-list"></ol>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast-container"></div>
+    <script src="script.js"></script>
+</body>
+</html>
+    <script  src="./script.js"></script>
+
+  </body>
+  
+</html>
